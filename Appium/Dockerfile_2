@@ -1,0 +1,78 @@
+FROM ubuntu:18.04
+
+LABEL maintainer "Srinivasan Sekar <srinivasan.sekar1990@gmail.com>"
+LABEL maintainer "osman corluk <corluk@hotmail.com>"
+ENV DEBIAN_FRONTEND=noninteractive
+
+#=============
+# Set WORKDIR
+#=============
+WORKDIR /root
+
+#==================
+# General Packages
+#------------------
+# openjdk-8-jdk
+#   Java
+# ca-certificates
+#   SSL client
+# tzdata
+#   Timezone
+# zip
+#   Make a zip file
+# unzip
+#   Unzip zip file
+# curl
+#   Transfer data from or to a server
+# wget
+#   Network downloader
+# libqt5webkit5
+#   Web content engine (Fix issue in Android)
+# libgconf-2-4
+#   Required package for chrome and chromedriver to run on Linux
+# xvfb
+#   X virtual framebuffer
+# gnupg
+#   Encryption software. It is needed for nodejs
+# salt-minion
+#   Infrastructure management (client-side)
+#==================
+RUN apt-get -qqy update && \
+    apt-get -qqy --no-install-recommends install \
+    openjdk-8-jdk \
+    ca-certificates \
+    tzdata \
+    zip \
+    unzip \
+    curl \
+    wget \
+    libqt5webkit5 \
+    libgconf-2-4 \
+    xvfb \
+    gnupg \
+    salt-minion \
+  && rm -rf /var/lib/apt/lists/*
+
+#===============
+# Set JAVA_HOME
+#===============
+ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre" \
+    PATH=$PATH:$JAVA_HOME/bin
+
+#=====================
+# Install Android SDK
+#=====================
+ARG SDK_VERSION=sdk-tools-linux-3859397
+ARG ANDROID_BUILD_TOOLS_VERSION=26.0.0
+ARG ANDROID_PLATFORM_VERSION="android-25"
+
+ENV SDK_VERSION=$SDK_VERSION \
+    ANDROID_BUILD_TOOLS_VERSION=$ANDROID_BUILD_TOOLS_VERSION \
+    ANDROID_HOME=/root
+
+RUN wget -O cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip && \
+    unzip tools.zip && rm tools.zip && \
+    chmod a+x -R $ANDROID_HOME && \
+    chown -R root:root $ANDROID_HOME
+
+ 
