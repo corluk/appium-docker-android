@@ -71,7 +71,7 @@ ENV SDK_VERSION=$SDK_VERSION \
     ANDROID_HOME=/root
 
 RUN wget -O cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip && \
-    unzip tools.zip && rm tools.zip && \
+    unzip cmdline-tools.zip && rm cmdline-tools.zip && \
     chmod a+x -R $ANDROID_HOME && \
     chown -R root:root $ANDROID_HOME
 
